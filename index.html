@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aesthetic Clock</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Outfit (Default), Orbitron (Neon), Playfair Display (Elegant), VT323 (Retro), Inter (Modern/Bold) -->
+    <!-- New Fonts: Sacramento (Cursive), Oswald (Condensed), Montserrat (Thin), Great Vibes (Cursive/Elegant) -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Inter:wght@400;700;900&family=Montserrat:wght@100;200;300;400&family=Orbitron:wght@400;700&family=Oswald:wght@300;400;700&family=Outfit:wght@200;300;400;500&family=Playfair+Display:ital,wght@0,400;1,400&family=Sacramento&family=VT323&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Background Video Element (YouTube Wrapper) -->
+    <div id="video-background">
+        <div id="yt-player"></div>
+    </div>
+
+    <div class="container">
+        <!-- Main Clock Display -->
+        <main class="clock-container style-default">
+            <div id="time-display" class="time">
+                <!-- Granular spans for styling -->
+                <span class="hour">12</span><span class="sep">:</span><span class="minute">00</span><span
+                    class="sep">:</span><span class="second">00</span><span class="ampm-tag">AM</span>
+            </div>
+            <div id="date-display" class="date">
+                <span class="weekday">Monday</span>, <span class="day-month">January 1</span>, <span
+                    class="year">2024</span>
+            </div>
+            <div id="region-display" class="region-label">India Standard Time</div>
+        </main>
+
+        <!-- Controls (Hidden in full screen) -->
+        <aside class="controls fade-target">
+            <!-- Menu Button -->
+            <button id="menu-btn" class="icon-btn" aria-label="Open Menu">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
+
+            <div class="control-group">
+                <label for="region-select">Region</label>
+                <select id="region-select">
+                    <option value="Asia/Kolkata" selected>India (IST)</option>
+                    <option value="America/New_York">New York (EST)</option>
+                    <option value="Europe/London">London (GMT)</option>
+                    <option value="Asia/Tokyo">Tokyo (JST)</option>
+                    <option value="Australia/Sydney">Sydney (AEDT)</option>
+                    <option value="UTC">UTC</option>
+                </select>
+            </div>
+
+            <button id="format-toggle-btn" class="toggle-btn" aria-label="Toggle 12/24 Hour Format">
+                <span class="toggle-text active">12H</span>
+                <span class="toggle-text">24H</span>
+            </button>
+
+            <button id="dark-mode-btn" class="icon-btn" aria-label="Toggle Dark Mode">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                </svg>
+            </button>
+
+            <button id="fullscreen-btn" class="icon-btn" aria-label="Toggle Fullscreen">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path
+                        d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" />
+                </svg>
+            </button>
+        </aside>
+    </div>
+
+    <!-- Menu Overlay -->
+    <div id="menu-overlay" class="menu-overlay hidden">
+        <div class="menu-content">
+            <header class="menu-header">
+                <h2>Settings</h2>
+                <button id="menu-close-btn" class="icon-btn" aria-label="Close Menu">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </header>
+
+            <!-- Main Navigation View -->
+            <div id="menu-main" class="menu-view">
+                <div class="menu-nav-btn" data-target="menu-styles">
+                    <div class="nav-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10" />
+                            <polyline points="12 6 12 12 16 14" />
+                        </svg>
+                    </div>
+                    <span>Clock Styles</span>
+                    <svg class="chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="9 18 15 12 9 6" />
+                    </svg>
+                </div>
+                <div class="menu-nav-btn" data-target="menu-backgrounds">
+                    <div class="nav-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <image x="2" y="2" width="20" height="20" href="data:image/svg+xml;base64,..." />
+                            <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
+                            <line x1="8" y1="21" x2="16" y2="21" />
+                            <line x1="12" y1="17" x2="12" y2="21" />
+                        </svg>
+                    </div>
+                    <span>Backgrounds</span>
+                    <svg class="chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="9 18 15 12 9 6" />
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Styles Sub-View -->
+            <div id="menu-styles" class="menu-view hidden">
+                <div class="sub-header">
+                    <button class="back-btn" data-target="menu-main">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="19" y1="12" x2="5" y2="12" />
+                            <polyline points="12 19 5 12 12 5" />
+                        </svg>
+                        Back
+                    </button>
+                    <h3>Clock Styles</h3>
+                </div>
+                <div class="options-grid" id="style-options">
+                    <!-- Options injected via JS or static -->
+                    <div class="option-card active" data-style="style-default">
+                        <div class="preview default-preview">12:00</div>
+                        <span>Default</span>
+                    </div>
+                    <div class="option-card" data-style="style-neon">
+                        <div class="preview neon-preview">12:00</div>
+                        <span>Neon</span>
+                    </div>
+                    <div class="option-card" data-style="style-classic">
+                        <div class="preview classic-preview">12:00</div>
+                        <span>Classic</span>
+                    </div>
+                    <div class="option-card" data-style="style-retro">
+                        <div class="preview retro-preview">12:00</div>
+                        <span>Retro</span>
+                    </div>
+                    <div class="option-card" data-style="style-bold">
+                        <div class="preview bold-preview">12:00</div>
+                        <span>Bold</span>
+                    </div>
+                    <!-- New Styles -->
+                    <div class="option-card" data-style="style-vertical">
+                        <div class="preview vertical-preview" style="flex-direction: column; line-height: 0.8;">
+                            <div style="font-size: 0.8em;">12</div>
+                            <div style="font-size: 0.8em;">00</div>
+                        </div>
+                        <span>Vertical</span>
+                    </div>
+                    <div class="option-card" data-style="style-elegant">
+                        <div class="preview elegant-preview" style="font-size: 1rem;">Sun</div>
+                        <span>Elegant</span>
+                    </div>
+                    <div class="option-card" data-style="style-typo">
+                        <div class="preview typo-preview" style="font-size: 0.8rem; font-weight: 900;">TUE</div>
+                        <span>Typo</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Backgrounds Sub-View -->
+            <div id="menu-backgrounds" class="menu-view hidden">
+                <div class="sub-header">
+                    <button class="back-btn" data-target="menu-main">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="19" y1="12" x2="5" y2="12" />
+                            <polyline points="12 19 5 12 12 5" />
+                        </svg>
+                        Back
+                    </button>
+                    <h3>Backgrounds</h3>
+                </div>
+                <div class="options-grid" id="bg-options">
+                    <div class="option-card active" data-bg="gradient">
+                        <div class="preview bg-gradient-preview"></div>
+                        <span>Gradient</span>
+                    </div>
+                    <div class="option-card" data-bg="new-york">
+                        <div class="preview bg-ny-preview"></div>
+                        <span>New York</span>
+                    </div>
+                    <div class="option-card" data-bg="forest">
+                        <div class="preview bg-forest-preview"></div>
+                        <span>Rain Forest</span>
+                    </div>
+                    <div class="option-card" data-bg="london">
+                        <div class="preview bg-london-preview"></div>
+                        <span>London</span>
+                    </div>
+                    <div class="option-card" data-bg="tokyo">
+                        <div class="preview bg-tokyo-preview"></div>
+                        <span>Tokyo</span>
+                    </div>
+                    <div class="option-card" data-bg="los-angeles">
+                        <div class="preview bg-la-preview"></div>
+                        <span>Los Angeles</span>
+                    </div>
+                    <div class="option-card" data-bg="monte-carlo">
+                        <div class="preview bg-mc-preview"></div>
+                        <span>Monte Carlo</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

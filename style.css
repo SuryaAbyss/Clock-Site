@@ -1,0 +1,795 @@
+:root {
+    --bg-gradient: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    --text-primary: #ffffff;
+    --text-secondary: rgba(255, 255, 255, 0.7);
+    --glass-bg: rgba(255, 255, 255, 0.1);
+    --glass-border: rgba(255, 255, 255, 0.2);
+    --font-main: 'Outfit', sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-main);
+    background: var(--bg-gradient);
+    color: var(--text-primary);
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    user-select: none;
+    /* Prevent text selection */
+}
+
+.container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    transition: all 0.5s ease;
+}
+
+/* Clock Styling */
+.clock-container {
+    text-align: center;
+    z-index: 10;
+}
+
+.time {
+    font-size: 15vw;
+    font-weight: 200;
+    line-height: 1;
+    letter-spacing: -0.05em;
+    text-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    font-variant-numeric: tabular-nums;
+    /* Flex to center content properly with the new span */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* Align baseline or center */
+    gap: 1rem;
+}
+
+.ampm-tag {
+    font-size: 2vw;
+    /* Much smaller size */
+    opacity: 0.6;
+    margin-top: 2vw;
+    /* Slight offset to align nicely */
+    font-weight: 300;
+}
+
+.date {
+    font-size: 2vw;
+    font-weight: 300;
+    margin-top: 1rem;
+    color: var(--text-secondary);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.region-label {
+    font-size: 1.2vw;
+    font-weight: 400;
+    margin-top: 0.5rem;
+    color: var(--text-secondary);
+    opacity: 0.8;
+}
+
+/* Controls Styling */
+.controls {
+    position: absolute;
+    bottom: 3rem;
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+    background: var(--glass-bg);
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    z-index: 20;
+}
+
+.control-group {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.control-group label {
+    font-size: 0.9rem;
+    font-weight: 300;
+    color: var(--text-secondary);
+}
+
+select {
+    background: transparent;
+    border: none;
+    color: var(--text-primary);
+    font-family: var(--font-main);
+    font-size: 1rem;
+    cursor: pointer;
+    outline: none;
+}
+
+select option {
+    background: #203a43;
+    color: var(--text-primary);
+}
+
+.icon-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: var(--text-primary);
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon-btn:hover {
+    opacity: 1;
+}
+
+/* Toggle Button Styling */
+.toggle-btn {
+    background: transparent;
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 0.3rem 0.6rem;
+    cursor: pointer;
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    color: var(--text-secondary);
+    font-family: var(--font-main);
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.toggle-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+}
+
+.toggle-text {
+    opacity: 0.5;
+    font-weight: 300;
+}
+
+.toggle-text.active {
+    opacity: 1;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+/* Hide controls content class */
+.controls.hidden {
+    opacity: 0;
+    transform: translateY(20px);
+    pointer-events: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .time {
+        font-size: 20vw;
+    }
+
+    .date {
+        font-size: 4vw;
+    }
+
+    .region-label {
+        font-size: 3vw;
+    }
+
+    .controls {
+        width: 90%;
+        justify-content: space-between;
+        bottom: 2rem;
+        padding: 1rem;
+    }
+
+    .control-group {
+        flex: 1;
+    }
+}
+
+/* Dark Mode Styles */
+body.dark-mode {
+    background: #000000;
+}
+
+body.dark-mode .time {
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.4), 0 0 40px rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+}
+
+body.dark-mode .date,
+body.dark-mode .region-label,
+body.dark-mode .ampm-tag {
+    color: rgba(255, 255, 255, 0.8);
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+}
+
+body.dark-mode .controls {
+    background: rgba(20, 20, 20, 0.6);
+    border-color: rgba(255, 255, 255, 0.05);
+}
+
+body.dark-mode .toggle-btn:hover,
+body.dark-mode .icon-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* --- New Menu & Feature Styles --- */
+
+/* Menu Overlay */
+.menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(5px);
+    z-index: 100;
+    display: flex;
+    justify-content: flex-end;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+.menu-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.menu-content {
+    width: 400px;
+    max-width: 90%;
+    height: 100%;
+    background: rgba(20, 20, 20, 0.85);
+    /* Darker glass for better contrast */
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-left: 1px solid var(--glass-border);
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    transform: translateX(0);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow-y: auto;
+}
+
+.menu-overlay.hidden .menu-content {
+    transform: translateX(100%);
+}
+
+.menu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--glass-border);
+    padding-bottom: 1rem;
+}
+
+.menu-header h2 {
+    font-weight: 500;
+    font-size: 1.5rem;
+}
+
+.menu-section h3 {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    margin-bottom: 1rem;
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* View Management */
+.menu-view {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.menu-view.hidden {
+    display: none;
+    /* Simple toggle for now, can animate later */
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Main Menu Navigation Buttons */
+.menu-nav-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.menu-nav-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+    border-color: var(--text-secondary);
+}
+
+.menu-nav-btn .nav-icon {
+    width: 60px;
+    height: 60px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-primary);
+}
+
+.menu-nav-btn span {
+    font-family: var(--font-main);
+    font-size: 1.2rem;
+    font-weight: 500;
+    flex: 1;
+}
+
+.menu-nav-btn .chevron {
+    opacity: 0.5;
+}
+
+/* Sub-View Header */
+.sub-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid var(--glass-border);
+    padding-bottom: 1rem;
+}
+
+.sub-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+
+/* Back Button */
+.back-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-main);
+    font-size: 1rem;
+    transition: color 0.2s ease;
+}
+
+.back-btn:hover {
+    color: var(--text-primary);
+}
+
+/* Options Grid */
+.options-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 1rem;
+}
+
+.option-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    padding: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.option-card:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+}
+
+.option-card.active {
+    border-color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.option-card span {
+    font-size: 0.9rem;
+    font-weight: 300;
+}
+
+/* Previews */
+.preview {
+    width: 100%;
+    height: 60px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    color: var(--text-primary);
+    background: rgba(0, 0, 0, 0.2);
+}
+
+/* Clock Style Previews */
+.default-preview {
+    font-family: 'Outfit', sans-serif;
+}
+
+.neon-preview {
+    font-family: 'Orbitron', sans-serif;
+    color: #00f3ff;
+    text-shadow: 0 0 10px #00f3ff;
+}
+
+.classic-preview {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+}
+
+.retro-preview {
+    font-family: 'VT323', monospace;
+    color: #ff0055;
+}
+
+.bold-preview {
+    font-family: 'Inter', sans-serif;
+    font-weight: 900;
+    letter-spacing: -2px;
+}
+
+/* Background Previews */
+.bg-gradient-preview {
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+}
+
+.bg-ny-preview {
+    background-image: url('https://img.youtube.com/vi/Hb08uAeYf6g/mqdefault.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.bg-forest-preview {
+    background-image: url('https://img.youtube.com/vi/hMxlDbv-rec/mqdefault.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.bg-london-preview {
+    background-image: url('https://img.youtube.com/vi/sXJLT3kYdhk/mqdefault.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.bg-tokyo-preview {
+    background-image: url('https://img.youtube.com/vi/MkdsvjGZv7U/mqdefault.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.bg-la-preview {
+    background-image: url('https://img.youtube.com/vi/3ecyAHQDsIU/mqdefault.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.bg-mc-preview {
+    background-image: url('https://img.youtube.com/vi/oS-rwVafano/mqdefault.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+/* Background Video */
+#video-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 1;
+    overflow: hidden;
+    pointer-events: none;
+    /* Allows clicking through */
+    opacity: 0;
+    transition: opacity 1s ease;
+}
+
+#video-background.active {
+    opacity: 1;
+}
+
+#yt-player {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100vw;
+    height: 100vh;
+    transform: translate(-50%, -50%) scale(1.5);
+    /* Scale up to hide UI/bars and cover better */
+    pointer-events: none;
+}
+
+/* Responsive scale adjustment */
+@media (min-aspect-ratio: 16/9) {
+    #yt-player {
+        width: 100vw;
+        height: 56.25vw;
+        /* 100 * 9 / 16 */
+    }
+}
+
+@media (max-aspect-ratio: 16/9) {
+    #yt-player {
+        width: 177.78vh;
+        /* 100 * 16 / 9 */
+        height: 100vh;
+    }
+}
+
+
+/* Clock Style Classes (Applied to .clock-container or .time) */
+.clock-container.style-neon .time,
+.clock-container.style-neon .date,
+.clock-container.style-neon .region-label {
+    font-family: 'Orbitron', sans-serif;
+    color: #fff;
+    text-shadow: 0 0 10px rgba(0, 243, 255, 0.8), 0 0 20px rgba(0, 243, 255, 0.4);
+}
+
+.clock-container.style-neon .date {
+    letter-spacing: 0.2em;
+    /* More spaced out for neon look */
+}
+
+.clock-container.style-classic .time,
+.clock-container.style-classic .date,
+.clock-container.style-classic .region-label {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+}
+
+.clock-container.style-classic .time {
+    font-weight: 400;
+}
+
+.clock-container.style-classic .date {
+    text-transform: capitalize;
+    /* Classic look usually isn't all caps */
+    letter-spacing: 0.05em;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.clock-container.style-retro .time,
+.clock-container.style-retro .date,
+.clock-container.style-retro .region-label {
+    font-family: 'VT323', monospace;
+    color: #ff0055;
+    /* Retrowave pink/red */
+    text-shadow: 2px 2px 0px rgba(255, 255, 255, 0.2);
+    text-transform: uppercase;
+}
+
+.clock-container.style-retro .date {
+    font-size: 3vw;
+    /* Slightly larger for retro pixel font readability */
+    letter-spacing: 0;
+}
+
+.clock-container.style-bold .time,
+.clock-container.style-bold .date,
+.clock-container.style-bold .region-label {
+    font-family: 'Inter', sans-serif;
+}
+
+.clock-container.style-bold .time {
+    font-weight: 900;
+    letter-spacing: -0.08em;
+}
+
+.clock-container.style-bold .date {
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: #fff;
+}
+
+/* --- New Visual Reference Styles --- */
+
+/* 1. Vertical Style (Stacked Thin) */
+.clock-container.style-vertical {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+}
+
+.clock-container.style-vertical .time {
+    flex-direction: column;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 100;
+    font-size: 25vw;
+    /* Huge */
+    line-height: 0.85;
+    gap: 0;
+}
+
+.clock-container.style-vertical .sep,
+.clock-container.style-vertical .second,
+.clock-container.style-vertical .ampm-tag {
+    display: none;
+    /* Hide seconds/colon for clean vertical look */
+}
+
+.clock-container.style-vertical .date {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 300;
+    font-size: 2vw;
+    letter-spacing: 0.2em;
+    margin-top: 2rem;
+    text-transform: uppercase;
+    opacity: 0.8;
+}
+
+.clock-container.style-vertical .region-label {
+    display: none;
+    /* Hide region for minimalism */
+}
+
+
+/* 2. Elegant Style (Cursive Day) */
+.clock-container.style-elegant {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.clock-container.style-elegant .time {
+    font-family: 'Oswald', sans-serif;
+    /* Condensed numbers */
+    font-weight: 300;
+    font-size: 8vw;
+    order: 1;
+    /* Time comes first like image 0? Or maybe Text first? Let's stick to standard order but style heavily */
+    opacity: 0.6;
+    letter-spacing: 0.05em;
+}
+
+.clock-container.style-elegant .date {
+    order: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: -1vw;
+    /* Overlap slightly */
+}
+
+.clock-container.style-elegant .weekday {
+    font-family: 'Great Vibes', cursive;
+    font-size: 10vw;
+    line-height: 1;
+    color: #fff;
+    text-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    margin-bottom: 0.5rem;
+    text-transform: none;
+    /* Keep cursive case */
+}
+
+.clock-container.style-elegant .day-month,
+.clock-container.style-elegant .year {
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.5vw;
+    text-transform: uppercase;
+    letter-spacing: 0.5em;
+    opacity: 0.7;
+}
+
+.clock-container.style-elegant .region-label {
+    order: 3;
+    font-family: 'Oswald', sans-serif;
+    font-size: 1vw;
+    opacity: 0.5;
+    margin-top: 1rem;
+}
+
+
+/* 3. Typographic UI Style (Bold Text) */
+.clock-container.style-typo {
+    align-items: flex-start;
+    /* Left align like Image 4 */
+    text-align: left;
+    padding-left: 5vw;
+    /* Offset from left */
+}
+
+.clock-container.style-typo .time {
+    order: 3;
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    font-size: 4vw;
+    margin-top: 1rem;
+}
+
+.clock-container.style-typo .date {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.clock-container.style-typo .year {
+    order: 0;
+    font-family: 'Inter', sans-serif;
+    font-size: 3vw;
+    font-weight: 700;
+    opacity: 0.6;
+}
+
+.clock-container.style-typo .weekday {
+    order: 1;
+    font-family: 'Inter', sans-serif;
+    font-size: 12vw;
+    font-weight: 900;
+    line-height: 0.9;
+    text-transform: uppercase;
+}
+
+.clock-container.style-typo .day-month {
+    order: 2;
+    font-family: 'Inter', sans-serif;
+    font-size: 8vw;
+    font-weight: 900;
+    line-height: 0.9;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.clock-container.style-typo .region-label {
+    display: none;
+}
+
+/* Updated Previews */
+.vertical-preview {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 100;
+}
+
+.elegant-preview {
+    font-family: 'Great Vibes', cursive;
+}
+
+.typo-preview {
+    font-family: 'Inter', sans-serif;
+    font-weight: 900;
+}
+
+/* Background Video */
