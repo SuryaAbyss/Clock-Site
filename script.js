@@ -301,12 +301,13 @@ function stopBackgroundVideo() {
 const menuMain = document.getElementById('menu-main');
 const menuStyles = document.getElementById('menu-styles');
 const menuBackgrounds = document.getElementById('menu-backgrounds');
+const menuTimer = document.getElementById('menu-timer');
 const menuNavBtns = document.querySelectorAll('.menu-nav-btn');
 const backBtns = document.querySelectorAll('.back-btn');
 
 function showView(viewId) {
     // Hide all views
-    [menuMain, menuStyles, menuBackgrounds].forEach(el => {
+    [menuMain, menuStyles, menuBackgrounds, menuTimer].forEach(el => {
         el.classList.add('hidden');
     });
     // Show target view
@@ -395,3 +396,100 @@ bgOptions.forEach(option => {
     });
 });
 
+
+
+
+/* --- Task Timer Logic --- */
+const startTimerBtn = document.getElementById('start-timer-btn');
+const cancelTimerBtn = document.getElementById('cancel-timer-btn');
+const taskNameInput = document.getElementById('task-name');
+const taskDurationInput = document.getElementById('task-duration');
+const timerNotification = document.getElementById('timer-notification');
+const notifyTaskName = document.getElementById('notify-task-name');
+const notifyTime = document.getElementById('notify-time');
+const timerProgress = document.getElementById('timer-progress');
+const timerProgressBar = document.querySelector('.timer-progress-bar'); // Parent for width calc
+
+let timerInterval;
+let timerTotalSeconds = 0;
+let timerRemainingSeconds = 0;
+
+function formatTimerTime(seconds) {
+    const m = Math.floor(seconds / 60);
+    const s = seconds % 60;
+    return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+}
+
+function startTaskTimer() {
+    const name = taskNameInput.value.trim() || 'Task';
+    const durationMins = parseInt(taskDurationInput.value, 10);
+
+    if (isNaN(durationMins) || durationMins <= 0) {
+        alert('Please enter a valid duration (1-120 minutes).');
+        return;
+    }
+
+    // Reset State
+    clearInterval(timerInterval);
+    timerTotalSeconds = durationMins * 60;
+    timerRemainingSeconds = timerTotalSeconds;
+
+    // UI Setup
+    notifyTaskName.textContent = name;
+    notifyTime.textContent = formatTimerTime(timerRemainingSeconds);
+    timerProgress.style.transition = 'none'; // Reset transition
+    timerProgress.style.width = '100%';
+    timerNotification.classList.remove('hidden', 'finished');
+
+    // Close Menu
+    toggleMenu();
+
+    // Start Countdown
+    // Small delay to allow transition reset to take effect before animating width
+    setTimeout(() => {
+        timerProgress.style.transition = `width ${timerTotalSeconds}s linear`;
+        timerProgress.style.width = '0%';
+    }, 50);
+
+    timerInterval = setInterval(() => {
+        timerRemainingSeconds--;
+
+        if (timerRemainingSeconds <= 0) {
+            endTaskTimer();
+        } else {
+            notifyTime.textContent = formatTimerTime(timerRemainingSeconds);
+        }
+    }, 1000);
+}
+
+function endTaskTimer() {
+    clearInterval(timerInterval);
+    notifyTime.textContent = "00:00";
+    timerNotification.classList.add('finished');
+
+    // Play a sound? (Optional, maybe later)
+
+    // Auto-close after 5 seconds
+    setTimeout(() => {
+        // Only close if it's still finished (user might have started new one?)
+        if (timerNotification.classList.contains('finished')) {
+            closeTimerNotification();
+        }
+    }, 5000);
+}
+
+function closeTimerNotification() {
+    timerNotification.classList.add('hidden');
+    setTimeout(() => {
+        timerNotification.classList.remove('finished');
+    }, 500); // Wait for exit animation
+    clearInterval(timerInterval);
+}
+
+function cancelTimer() {
+    clearInterval(timerInterval);
+    closeTimerNotification();
+}
+
+startTimerBtn.addEventListener('click', startTaskTimer);
+cancelTimerBtn.addEventListener('click', cancelTimer);
