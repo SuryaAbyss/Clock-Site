@@ -559,6 +559,204 @@ body.dark-mode .icon-btn:hover {
 }
 
 
+/* --- Task Timer Feature Styles --- */
+
+/* Form Styling */
+.timer-setup {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.input-group label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    font-weight: 300;
+}
+
+.input-group input {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    border-radius: 8px;
+    padding: 1rem;
+    color: var(--text-primary);
+    font-family: var(--font-main);
+    font-size: 1rem;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.input-group input:focus {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: var(--text-primary);
+}
+
+.action-btn {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+    border: 1px solid var(--glass-border);
+    border-radius: 8px;
+    padding: 1rem;
+    color: var(--text-primary);
+    font-family: var(--font-main);
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-top: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.action-btn:hover {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.1));
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Floating Notification - Liquid Glass Theme */
+.timer-float {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 320px;
+
+    /* Liquid Glass Effect */
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    /* Crisper, brighter border */
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+
+    border-radius: 20px;
+    /* Softer corners */
+    z-index: 200;
+    overflow: hidden;
+    transform: translateX(0);
+    opacity: 1;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s ease, background 0.5s ease;
+}
+
+.timer-float.hidden {
+    transform: translateX(120%);
+    opacity: 0;
+    pointer-events: none;
+}
+
+.timer-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.5rem;
+    /* Add inner glow for depth */
+    background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.05), transparent 70%);
+}
+
+.timer-info h4 {
+    margin: 0;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.9);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+    margin-bottom: 0.2rem;
+    max-width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.notify-time {
+    font-size: 2rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+    color: #fff;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.icon-btn-small {
+    background: rgba(255, 255, 255, 0.05);
+    /* Slight BG for button */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.8);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    padding: 6px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon-btn-small:hover {
+    background: rgba(255, 85, 85, 0.2);
+    /* Red tint on hover */
+    border-color: rgba(255, 85, 85, 0.5);
+    color: #ff5555;
+    transform: rotate(90deg);
+    /* Playful interaction */
+}
+
+.timer-progress-bar {
+    width: 100%;
+    height: 4px;
+    background: rgba(0, 0, 0, 0.2);
+    /* Darker track for contrast */
+}
+
+.progress-fill {
+    height: 100%;
+    background: #00f3ff;
+    /* Neon Cyan for "Liquid" feel initially */
+    box-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
+    width: 100%;
+    transition: width 1s linear;
+}
+
+/* Finished State & Animation */
+@keyframes blink-alarm {
+
+    0%,
+    100% {
+        box-shadow: 0 0 20px rgba(46, 204, 113, 0.4), inset 0 0 10px rgba(46, 204, 113, 0.2);
+        border-color: rgba(46, 204, 113, 0.8);
+        transform: scale(1);
+    }
+
+    50% {
+        box-shadow: 0 0 40px rgba(46, 204, 113, 0.8), inset 0 0 30px rgba(46, 204, 113, 0.4);
+        border-color: rgba(255, 255, 255, 1);
+        transform: scale(1.02);
+    }
+}
+
+.timer-float.finished {
+    background: rgba(46, 204, 113, 0.2);
+    /* Subtle green tint, let glass shine */
+    backdrop-filter: blur(25px);
+
+    /* Animation */
+    animation: blink-alarm 1.5s infinite ease-in-out;
+}
+
+.timer-float.finished .notify-time,
+.timer-float.finished .timer-info h4 {
+    color: #fff;
+    text-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+}
+
+.timer-float.finished .progress-fill {
+    background: #2ecc71;
+    box-shadow: 0 0 15px #2ecc71;
+}
+
+
 /* Clock Style Classes (Applied to .clock-container or .time) */
 .clock-container.style-neon .time,
 .clock-container.style-neon .date,
