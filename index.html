@@ -128,6 +128,20 @@
                         <polyline points="9 18 15 12 9 6" />
                     </svg>
                 </div>
+                <div class="menu-nav-btn" data-target="menu-timer">
+                    <div class="nav-icon">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                    </div>
+                    <span>Task Timer</span>
+                    <svg class="chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="9 18 15 12 9 6" />
+                    </svg>
+                </div>
             </div>
 
             <!-- Styles Sub-View -->
@@ -228,6 +242,52 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Task Timer Sub-View -->
+            <div id="menu-timer" class="menu-view hidden">
+                <div class="sub-header">
+                    <button class="back-btn" data-target="menu-main">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="19" y1="12" x2="5" y2="12" />
+                            <polyline points="12 19 5 12 12 5" />
+                        </svg>
+                        Back
+                    </button>
+                    <h3>Task Timer</h3>
+                </div>
+                <div class="timer-setup">
+                    <div class="input-group">
+                        <label for="task-name">Task Name</label>
+                        <input type="text" id="task-name" placeholder="e.g. Focus Session">
+                    </div>
+                    <div class="input-group">
+                        <label for="task-duration">Duration (Minutes)</label>
+                        <input type="number" id="task-duration" value="25" min="1" max="120">
+                    </div>
+                    <button id="start-timer-btn" class="action-btn">Start Timer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Timer Notification Popup -->
+    <div id="timer-notification" class="timer-float hidden">
+        <div class="timer-content">
+            <div class="timer-info">
+                <h4 id="notify-task-name">Task Name</h4>
+                <div id="notify-time" class="notify-time">00:00</div>
+            </div>
+            <button id="cancel-timer-btn" class="icon-btn-small" aria-label="Cancel Timer">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+        </div>
+        <div class="timer-progress-bar">
+            <div id="timer-progress" class="progress-fill"></div>
         </div>
     </div>
 
